@@ -7,14 +7,52 @@
     android:background="@drawable/background">
 
     <LinearLayout
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_marginTop="25sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="@string/status"/>
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7.5sp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="@string/status_text"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/conn_disconn_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_below="@id/status"
+        android:layout_marginTop="25sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10sp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/connect"/>
+
+    <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/conn_disconn_button"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical"
         android:weightSum="5"
-        android:background="@android:color/transparent"
-        >
+        android:background="@android:color/transparent">
             <ImageView
                 android:id="@+id/cam_view"
                 android:layout_width="wrap_content"
@@ -38,6 +76,8 @@
                 android:orientation="horizontal"
                 android:weightSum="3"
                 android:layout_weight=".25"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
                 android:background="@android:color/transparent">
 
                 <ImageButton
@@ -58,8 +98,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginRight="5sp"
-                    android:layout_marginLeft="5sp"/>
+                    android:layout_marginRight="3sp"
+                    android:layout_marginLeft="3sp"/>
 
                 <ImageButton
                     android:id="@+id/btnright"

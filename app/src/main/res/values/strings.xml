@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">NXTBlueToothController</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="status">STATUS&#58;</string>
+    <string name="status_text">DISCONNECTED</string>
     <string name="action_settings">Settings</string>
 </resources>
