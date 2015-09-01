@@ -1,5 +1,16 @@
 <resources>
-    <string name="app_name">NXTBlueToothController</string>
+    <string name="app_name">NXT BlueTooth Controller</string>
+
+    //Strings for contentDescriptions
+    <string name="connection_button">This button will connect or disconnect the user to the NXT robot</string>
+    <string name="camera_view">This Image View will display the video from the Android devices camera</string>
+    <string name="up_descr">This button will move the NXT robot forward</string>
+    <string name="down_descr">This button will move the NXT robot backwards</string>
+    <string name="left_descr">This button will move the NXT robot left</string>
+    <string name="right_descr">This button will more the NXT robot right</string>
+    <string name="stop_descr">This button will stop the NXT robot movement</string>
+
+    //Strings for app use
     <string name="status">STATUS&#58;</string>
     <string name="status_text">DISCONNECTED</string>
     <string name="action_settings">Settings</string>
