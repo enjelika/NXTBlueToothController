@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
                         btnRight, btnBack, connect;
     private NXTBluetooth nxt = new NXTBluetooth();
     private TextView connectionStatus;
+    private Boolean connected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +36,25 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                connectionStatus.setText("Waiting...");//R.string.waiting);
-                nxt.enableBluetooth();
-                if (nxt.connectToNXT()){
-                    //Success!  Device is connected through Bluetooth to NXT robot
-                    connectionStatus.setText(R.string.connected);
+                if (connected){
+                    //Sent disconnect message to NXT
+                    //nxt.writeMessage();
+
+                    //disconnect Bluetooth connection
+                    nxt = new NXTBluetooth();
+                    connectionStatus.setText(R.string.disconnected);
+                    connect.setImageResource(R.drawable.connect);
                 } else {
-                    //The device did not connect to the NXT robot
-                    connectionStatus.setText(R.string.error_conn);
+                    connectionStatus.setText("Waiting...");//R.string.waiting);
+                    nxt.enableBluetooth();
+                    if (nxt.connectToNXT()){
+                        //Success!  Device is connected through Bluetooth to NXT robot
+                        connectionStatus.setText(R.string.connected);
+                        connect.setImageResource(R.drawable.disconnect);
+                    } else {
+                        //The device did not connect to the NXT robot
+                        connectionStatus.setText(R.string.error_conn);
+                    }
                 }
             }
         });
