@@ -7,29 +7,45 @@ import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageButton btnUp;
-    private ImageButton btnLeft;
-    private ImageButton btnStop;
-    private ImageButton btnRight;
-    private ImageButton btnBack;
+    private ImageButton btnUp, btnLeft, btnStop,
+                        btnRight, btnBack, connect;
     private NXTBluetooth nxt;
+    private TextView connectionStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initialize all Image Buttons
         btnUp = (ImageButton) findViewById(R.id.btnup);
         btnLeft = (ImageButton) findViewById(R.id.btnleft);
         btnRight = (ImageButton) findViewById(R.id.btnright);
         btnBack = (ImageButton) findViewById(R.id.btndown);
         btnStop = (ImageButton) findViewById(R.id.btnstop);
+        connect = (ImageButton) findViewById(R.id.conn_disconn_button);
 
-        nxt.enableBluetooth();
-        nxt.connectToNXT();
+        //Initialize TextView for connection status
+        connectionStatus = (TextView) findViewById(R.id.status_text);
+
+        connect.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectionStatus.setText(R.string.waiting);
+                nxt.enableBluetooth();
+                if (nxt.connectToNXT()){
+                    //Success!  Device is connected through Bluetooth to NXT robot
+                    connectionStatus.setText(R.string.connected);
+                } else {
+                    //The device did not connect to the NXT robot
+                    connectionStatus.setText(R.string.error_conn);
+                }
+            }
+        });
 
         btnUp.setOnClickListener(new OnClickListener() {
             @Override
