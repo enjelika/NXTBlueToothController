@@ -13,7 +13,7 @@ import android.util.Log;
 public class NXTBluetooth {
 
     //Target NXT mac address
-    final String nxt = "00:16:53:15:a8:79";
+    final String nxt = "00:16:53:15:A8:79";
 
     BluetoothAdapter localAdapter;
     BluetoothSocket socket_nxt;
@@ -26,7 +26,7 @@ public class NXTBluetooth {
         if(localAdapter.isEnabled() == false) {
             localAdapter.enable();
             while(!(localAdapter.isEnabled())) {
-
+                System.out.println("Trying to enable BlueTooth...");
             }
         }
     }
@@ -39,6 +39,7 @@ public class NXTBluetooth {
 
         //try to connect to NXT
         try {
+            //Bluetooth serial board well-known SPP UUID
             socket_nxt = nxt_device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
 
             socket_nxt.connect();

@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton btnUp, btnLeft, btnStop,
                         btnRight, btnBack, connect;
-    private NXTBluetooth nxt;
+    private NXTBluetooth nxt = new NXTBluetooth();
     private TextView connectionStatus;
 
     @Override
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                connectionStatus.setText(R.string.waiting);
+                connectionStatus.setText("Waiting...");//R.string.waiting);
                 nxt.enableBluetooth();
                 if (nxt.connectToNXT()){
                     //Success!  Device is connected through Bluetooth to NXT robot
