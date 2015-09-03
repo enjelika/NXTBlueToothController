@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
                         btnRight, btnBack, connect;
     private NXTBluetooth nxt = new NXTBluetooth();
     private TextView connectionStatus;
-    private Boolean connected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +35,15 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (connected){
-                    //Sent disconnect message to NXT
-                    //nxt.writeMessage();
+                if (nxt.isConnected()){
+                    //disconnect NXT
+                    nxt.disconnect();
 
-                    //disconnect Bluetooth connection
-                    nxt = new NXTBluetooth();
+                    //change status text
                     connectionStatus.setText(R.string.disconnected);
+
+                    //update button image
+                    //update button image
                     connect.setImageResource(R.drawable.connect);
                 } else {
                     connectionStatus.setText("Waiting...");//R.string.waiting);

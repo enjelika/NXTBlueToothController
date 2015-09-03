@@ -15,9 +15,9 @@ public class NXTBluetooth {
     //Target NXT mac address
     final String nxt = "00:16:53:15:A8:79";
 
-    BluetoothAdapter localAdapter;
-    BluetoothSocket socket_nxt;
-    boolean success = false;
+    private BluetoothAdapter localAdapter;
+    private BluetoothSocket socket_nxt;
+    private boolean connected = false;
 
     //Enables Bluetooth if not enabled
     public void enableBluetooth() {
@@ -44,13 +44,17 @@ public class NXTBluetooth {
 
             socket_nxt.connect();
 
-            success = true;
+            connected = true;
 
         } catch (IOException e) {
             Log.d("Bluetooth", "Error: Device not found or cannot connect");
-            success = false;
+            connected = false;
         }
-        return success;
+        return connected;
+    }
+
+    public boolean isConnected(){
+        return connected;
     }
 
     public void writeMessage(byte msg) throws InterruptedException {
@@ -89,4 +93,18 @@ public class NXTBluetooth {
         }
     }
 
+    public void disconnect() {
+
+        try{
+            if(connected){
+                socket_nxt.close();
+                localAdapter = null;
+                socket_nxt = null;
+                connected = false;
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
