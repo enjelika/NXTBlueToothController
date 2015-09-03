@@ -12,12 +12,12 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal"
-        android:layout_marginTop="25sp">
+        android:layout_marginTop="15sp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:text="@string/status"/>
 
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7.5sp"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:text="@string/idle"/>
     </LinearLayout>
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_below="@id/status"
-        android:layout_marginTop="25sp"
+        android:layout_marginTop="15sp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="10sp"
         android:background="@android:color/transparent"
@@ -53,15 +53,8 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
         android:weightSum="5"
+        android:layout_marginTop="20sp"
         android:background="@android:color/transparent">
-            <ImageView
-                android:id="@+id/cam_view"
-                android:contentDescription="@string/camera_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.25"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center_horizontal" />
 
             <ImageButton
                 android:id="@+id/btnup"
@@ -70,18 +63,15 @@
                 android:src="@drawable/up"
                 android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".25"/>
+                android:layout_height="wrap_content"/>
             <LinearLayout
                 android:id="@+id/btn_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:weightSum="3"
-                android:layout_weight=".25"
                 android:layout_marginTop="5sp"
-                android:layout_marginBottom="5sp"
+                android:layout_marginBottom="3sp"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent">
 
                 <ImageButton
@@ -95,15 +85,6 @@
                     android:layout_marginEnd="4sp"/>
 
                 <ImageButton
-                    android:id="@+id/btnstop"
-                    android:contentDescription="@string/stop_descr"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/stop"
-                    android:background="@android:color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <ImageButton
                     android:id="@+id/btnright"
                     android:contentDescription="@string/right_descr"
                     android:layout_gravity="center_vertical"
@@ -111,7 +92,7 @@
                     android:background="@android:color/transparent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4sp"/>
+                    android:layout_marginStart="10sp"/>
 
             </LinearLayout>
 
@@ -122,11 +103,18 @@
                 android:src="@drawable/down"
                 android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight=".25"/>
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/btnstop"
+                android:contentDescription="@string/stop_descr"
+                android:layout_marginTop="15sp"
+                android:layout_gravity="center"
+                android:src="@drawable/stop"
+                android:background="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
-
-
-
 
 </RelativeLayout>
