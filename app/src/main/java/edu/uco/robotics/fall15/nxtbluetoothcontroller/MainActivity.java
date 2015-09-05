@@ -38,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (nxt.isConnected()){
+                    //send disconnect message to NXT------------
+                    byte msg = 99; //Literally need to send the numeric values - not in 0001 format
+                    try {
+                        nxt.writeMessage(msg);
+                        System.out.println("Sent byte msg " + msg);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //-----------------------------------------
+
                     //disconnect NXT
                     nxt.disconnect();
 
