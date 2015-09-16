@@ -50,6 +50,8 @@ public class NXTBluetooth {
             Log.d("Bluetooth", "Error: Device not found or cannot connect");
             connected = false;
         }
+        //stopping discovery may speed connection
+        localAdapter.cancelDiscovery();
         return connected;
     }
 
@@ -78,7 +80,7 @@ public class NXTBluetooth {
 
     }
 
-    public int readMessage(String nxt) {
+    public int readMessage() {
         BluetoothSocket connection_Socket = socket_nxt;
         int n;
 
@@ -97,6 +99,12 @@ public class NXTBluetooth {
 
         try{
             if(connected){
+                byte msg = 0x30;
+                try {
+                    writeMessage(msg);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 socket_nxt.close();
                 localAdapter = null;
                 socket_nxt = null;

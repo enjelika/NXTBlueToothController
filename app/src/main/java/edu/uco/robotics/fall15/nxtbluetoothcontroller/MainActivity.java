@@ -1,6 +1,8 @@
 package edu.uco.robotics.fall15.nxtbluetoothcontroller;
 
 import android.content.pm.ActivityInfo;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -55,10 +57,9 @@ public class MainActivity extends AppCompatActivity {
                     connectionStatus.setText(R.string.disconnected);
 
                     //update button image
-                    //update button image
                     connect.setImageResource(R.drawable.connect);
                 } else {
-                    connectionStatus.setText("Waiting...");//R.string.waiting);
+                    connectionStatus.setText(R.string.waiting);
                     nxt.enableBluetooth();
                     if (nxt.connectToNXT()){
                         //Success!  Device is connected through Bluetooth to NXT robot
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     @Override
@@ -129,4 +131,13 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+            }
+        }
+    };
 }
