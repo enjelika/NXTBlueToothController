@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
                         btnRight, btnBack, connect;
     private NXTBluetooth nxt = new NXTBluetooth();
     private TextView connectionStatus;
+    private NXTListenThread listenThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                         //Success!  Device is connected through Bluetooth to NXT robot
                         connectionStatus.setText(R.string.connected);
                         connect.setImageResource(R.drawable.disconnect);
+                        listenThread = new NXTListenThread(nxt, mHandler);
+                        listenThread.run();
+
                     } else {
                         //The device did not connect to the NXT robot
                         connectionStatus.setText(R.string.error_conn);
@@ -135,8 +140,17 @@ public class MainActivity extends AppCompatActivity {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-
+            switch (msg.arg1) {
+                case 19:
+                    Toast.makeText(getApplicationContext(), "Received 19", Toast.LENGTH_LONG).show();
+                    break;
+                case 29:
+                    Toast.makeText(getApplicationContext(), "Received 29", Toast.LENGTH_LONG).show();
+                    break;
+                case 99:
+                    nxt.disconnect();
+                default:
+                    break;
             }
         }
     };

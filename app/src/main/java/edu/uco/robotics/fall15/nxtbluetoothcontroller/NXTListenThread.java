@@ -17,7 +17,7 @@ public class NXTListenThread extends Thread {
     public static final int STATE_CONNECTING = 2;
     public static final int STATE_CONNECTED = 3;
 
-    private NXTListenThread(NXTBluetooth NXTB, Handler handler){
+    public NXTListenThread(NXTBluetooth NXTB, Handler handler){
         NXT = NXTB;
         mHandler = handler;
         if (NXT.isConnected() == true){
@@ -29,11 +29,12 @@ public class NXTListenThread extends Thread {
 
     @Override
     public void run() {
-        byte[] buffer = new byte[1024];
+
         int bytes;
+
         while(true) {
             bytes = NXT.readMessage();
-            mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+            mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1).sendToTarget();
         }
     }
 }
