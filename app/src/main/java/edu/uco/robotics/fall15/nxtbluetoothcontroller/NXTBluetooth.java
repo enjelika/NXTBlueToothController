@@ -13,7 +13,8 @@ import android.util.Log;
 public class NXTBluetooth {
 
     //Target NXT mac address
-    final String nxt = "00:16:53:15:A8:79";
+    final String nxt = "00:16:53:15:A8:79"; //NXT
+    //final String nxt = "00:16:53:0D:74:10";  //NXT3
 
     private BluetoothAdapter localAdapter;
     private BluetoothSocket socket_nxt;
