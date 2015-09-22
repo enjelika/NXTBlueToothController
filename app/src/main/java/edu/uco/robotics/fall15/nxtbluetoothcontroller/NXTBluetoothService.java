@@ -455,7 +455,8 @@ public class NXTBluetoothService {
             while (true) {
                 try {
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
+                    bytes = mmInStream.read(buffer); //error here
+                    System.out.println("BYTES =" + bytes);
 
                     // Send the obtained bytes to the UI Activity
                     mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)

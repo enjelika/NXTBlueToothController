@@ -7,20 +7,25 @@ import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+
 public class NXTBluetooth {
 
-    //Target NXT mac address
+    /**Target NXT mac address**/
     final String nxt = "00:16:53:15:A8:79"; //NXT
     //final String nxt = "00:16:53:0D:74:10";  //NXT3
 
+    final UUID UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
     private BluetoothAdapter localAdapter;
     private BluetoothSocket socket_nxt;
+    private AcceptThread mSecureAcceptThread;
     private boolean connected = false;
 
-    //Enables Bluetooth if not enabled
+    /**Enables Bluetooth if not enabled*/
     public void enableBluetooth() {
         localAdapter = BluetoothAdapter.getDefaultAdapter();
         //if Bluetooth is not enabled
@@ -32,7 +37,7 @@ public class NXTBluetooth {
         }
     }
 
-    //Connect to NXT
+    /**Connect to NXT*/
     public boolean connectToNXT() {
 
         //get the Bluetooth device of the NXT
@@ -41,7 +46,7 @@ public class NXTBluetooth {
         //try to connect to NXT
         try {
             //Bluetooth serial board well-known SPP UUID
-            socket_nxt = nxt_device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+            socket_nxt = nxt_device.createRfcommSocketToServiceRecord(UUID_SECURE);//UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
 
             socket_nxt.connect();
 
@@ -115,5 +120,34 @@ public class NXTBluetooth {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * This thread runs while listening for incoming connections. It behaves
+     * like a server-side client. It runs until a connection is accepted
+     * (or until cancelled).
+     */
+    private class AcceptThread extends Thread {
+        // The local server socket
+        //private final BluetoothServerSocket mmServerSocket;
+        private String mSocketType;
+
+        public AcceptThread(boolean secure) {
+            BluetoothServerSocket tmp = null;
+            mSocketType = secure ? "Secure" : "Insecure";
+
+            // Create a new listening server socket
+            try {
+                if (secure) {
+                    tmp = localAdapter.listenUsingRfcommWithServiceRecord("SECURE", UUID_SECURE);
+                } else {
+//                    tmp = localAdapter.listenUsingInsecureRfcommWithServiceRecord(
+//                            "NOT SECURE", UUID_INSECURE);
+                }
+            } catch (IOException e) {
+                Log.e("ACCEPT_ERROR", "Socket Type: " + mSocketType + "listen() failed", e);
+            }
+            //mmServerSocket = tmp;
+        }
     }
 }

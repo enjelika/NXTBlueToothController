@@ -1,5 +1,6 @@
 package edu.uco.robotics.fall15.nxtbluetoothcontroller;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -80,49 +82,17 @@ public class MainActivity extends AppCompatActivity {
                 if(mNXTService == null){
                     setupNXTBluetoothService();
                     connectDevice();
+                    CharSequence st = "STATUS: Connected";
+                    setStatus(st);
                     connect.setImageResource(R.drawable.disconnect);
                 }else if(mNXTService.getState() == 3){
-                    //TODO: fix crash that occurs in this section
                     byte message = 99;
                     sendMessage(message);
-                    setupNXTBluetoothService();
+                    mNXTService.stop();
+                    CharSequence st = "STATUS: Disconnected";
+                    setStatus(st);
                     connect.setImageResource(R.drawable.connect);
                 }
-//                if (nxt.isConnected()){
-//                    //send disconnect message to NXT------------
-//                    byte msg = 99; //Literally need to send the numeric values - not in 0001 format
-//                    try {
-//                        nxt.writeMessage(msg);
-//                        System.out.println("Sent byte msg " + msg);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    //-----------------------------------------
-//
-//                    //disconnect NXT
-//                    nxt.disconnect();
-//
-//                    //change status text
-//                    connectionStatus.setText(R.string.disconnected);
-//
-//                    //update button image
-//                    connect.setImageResource(R.drawable.connect);
-//                } else {
-//                    connectionStatus.setText(R.string.waiting);
-//                    nxt.enableBluetooth();
-//                    if (nxt.connectToNXT()){
-//                        //Success!  Device is connected through Bluetooth to NXT robot
-//                        connectionStatus.setText(R.string.connected);
-//                        connect.setImageResource(R.drawable.disconnect);
-//                        listenThread = new NXTListenThread(nxt, mHandler);
-//                        listenThread.setPriority(Thread.MIN_PRIORITY);
-//                        listenThread.run();
-//
-//                    } else {
-//                        //The device did not connect to the NXT robot
-//                        connectionStatus.setText(R.string.error_conn);
-//                    }
-//                }
             }
         });
 
@@ -194,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 //    /**
-//     * Establish connection with other divice
+//     * Establish connection with other device
 //     *
 //     * @param data   An {@link Intent} with {@link DeviceListActivity#EXTRA_DEVICE_ADDRESS} extra.
 //     * @param secure Socket Security type - Secure (true) , Insecure (false)
@@ -256,17 +226,13 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param subTitle status
      */
-//    private void setStatus(CharSequence subTitle) {
-//        FragmentActivity activity = getActivity();
-//        if (null == activity) {
-//            return;
-//        }
-//        final ActionBar actionBar = activity.getActionBar();
-//        if (null == actionBar) {
-//            return;
-//        }
-//        actionBar.setSubtitle(subTitle);
-//    }
+    private void setStatus(CharSequence subTitle) {
+        final ActionBar actionBar = this.getActionBar();
+        if (null == actionBar) {
+            return;
+        }
+        actionBar.setTitle(subTitle);
+    }
 
 
 
@@ -294,9 +260,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case Constants.MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
-                    // construct a string from the buffer
-                    String writeMessage = new String(writeBuf);
+                    /**Not needed*/
+//                    byte[] writeBuf = (byte[]) msg.obj;
+//                    // construct a string from the buffer
+//                    String writeMessage = new String(writeBuf);
 //                    mConversationArrayAdapter.add("Me:  " + writeMessage);
                     /** TODO: code to display message on android app screen here*/
                     break;
