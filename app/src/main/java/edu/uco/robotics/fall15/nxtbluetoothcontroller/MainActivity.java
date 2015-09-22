@@ -1,14 +1,10 @@
 package edu.uco.robotics.fall15.nxtbluetoothcontroller;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnUp, btnLeft, btnStop,
                         btnRight, btnBack, connect;
     //private NXTBluetooth nxt = new NXTBluetooth();
-    private TextView connectionStatus;
     //private NXTListenThread listenThread;
 
     // Intent request codes
@@ -54,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setTitle("STATUS: Not Connected");
 
         //Initialize all Image Buttons
         btnUp = (ImageButton) findViewById(R.id.btnup);
@@ -62,9 +57,6 @@ public class MainActivity extends AppCompatActivity {
         btnBack = (ImageButton) findViewById(R.id.btndown);
         btnStop = (ImageButton) findViewById(R.id.btnstop);
         connect = (ImageButton) findViewById(R.id.conn_disconn_button);
-
-        //Initialize TextView for connection status
-        connectionStatus = (TextView) findViewById(R.id.status_text);
 
         //Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -82,15 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 if(mNXTService == null){
                     setupNXTBluetoothService();
                     connectDevice();
-                    CharSequence st = "STATUS: Connected";
-                    setStatus(st);
                     connect.setImageResource(R.drawable.disconnect);
                 }else if(mNXTService.getState() == 3){
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
-                    CharSequence st = "STATUS: Disconnected";
-                    setStatus(st);
                     connect.setImageResource(R.drawable.connect);
                 }
             }
@@ -99,35 +87,40 @@ public class MainActivity extends AppCompatActivity {
         btnUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                byte message = 19;
+//                sendMessage(message);
             }
         });
 
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                byte message = 29;
+//                sendMessage(message);
             }
         });
 
         btnLeft.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                byte message = 39;
+//                sendMessage(message);
             }
         });
 
         btnRight.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                byte message = 49;
+//                sendMessage(message);
             }
         });
 
         btnStop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                byte message = 59;
+//                sendMessage(message);
             }
         });
 
@@ -203,39 +196,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    /**
-     * Updates the status on the action bar.
-     *
-     * @param resId a string resource ID
-     */
-//    private void setStatus(int resId) {
-//        FragmentActivity activity = getActivity();
-//        if (null == activity) {
-//            return;
-//        }
-//        final ActionBar actionBar = activity.getActionBar();
-//        if (null == actionBar) {
-//            return;
-//        }
-//        actionBar.setSubtitle(resId);
-//    }
-
-    /**
-     * Updates the status on the action bar.
-     *
-     * @param subTitle status
-     */
-    private void setStatus(CharSequence subTitle) {
-        final ActionBar actionBar = this.getActionBar();
-        if (null == actionBar) {
-            return;
-        }
-        actionBar.setTitle(subTitle);
-    }
-
-
-
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -244,35 +204,30 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case NXTBluetoothService.STATE_CONNECTED:
-//                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
 //                            mConversationArrayAdapter.clear();
-                              connectionStatus.setText(R.string.connected);
+                              setTitle("STATUS: Connected");
                             break;
                         case NXTBluetoothService.STATE_CONNECTING:
-//                            setStatus(R.string.title_connecting);
-                            connectionStatus.setText(R.string.waiting);
+                            setTitle("STATUS: Waiting...");
                             break;
                         case NXTBluetoothService.STATE_LISTEN:
                         case NXTBluetoothService.STATE_NONE:
-//                            setStatus(R.string.title_not_connected);
-                            connectionStatus.setText(R.string.disconnected);
+                            setTitle("STATUS: Disconnected");
                             break;
                     }
                     break;
+
                 case Constants.MESSAGE_WRITE:
-                    /**Not needed*/
-//                    byte[] writeBuf = (byte[]) msg.obj;
-//                    // construct a string from the buffer
-//                    String writeMessage = new String(writeBuf);
-//                    mConversationArrayAdapter.add("Me:  " + writeMessage);
-                    /** TODO: code to display message on android app screen here*/
                     break;
+
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
+                    /**TODO: code to display message on android app screen here*/
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
 //                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     break;
+
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
                     //mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
@@ -282,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
 //                    }
                     Toast.makeText(MainActivity.this, "Connected to NXT", Toast.LENGTH_SHORT).show();
                     break;
+
                 case Constants.MESSAGE_TOAST:
 //                    if (null != activity) {
 //                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),

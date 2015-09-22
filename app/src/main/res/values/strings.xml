@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NXT BlueTooth Controller</string>
+    <string name="app_name">NXT Bluetooth Controller</string>
 
     //Strings for contentDescriptions
     <string name="connection_button">This button will connect or disconnect the user to the NXT robot</string>
