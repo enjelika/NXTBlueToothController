@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mNXTService == null){
+                if(mNXTService == null || mNXTService.getState() == 0){
                     setupNXTBluetoothService();
                     connectDevice();
                     connect.setImageResource(R.drawable.disconnect);
@@ -221,11 +221,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case Constants.MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
-                    /**TODO: code to display message on android app screen here*/
-                    // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-//                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    /**Gets int value of message from NXT that is passed from NXTBluetoothService*/
+                    int message = msg.arg1;
+                    /**TODO: add cases for each message to perform tasks*/
+                    switch(message){
+
+                    }
                     break;
 
                 case Constants.MESSAGE_DEVICE_NAME:
@@ -243,6 +244,12 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
 //                                Toast.LENGTH_SHORT).show();
 //                    }
+                    if(msg.getData().getString(Constants.TOAST) == "Unable to connect device"){
+                        //CharSequence st = "STATUS: Disconnected";
+                        //setStatus(st);
+                        setupNXTBluetoothService();
+                        connect.setImageResource(R.drawable.connect);
+                    }
                     Toast.makeText(MainActivity.this, msg.getData().getString(Constants.TOAST), Toast.LENGTH_SHORT).show();
                     break;
             }
