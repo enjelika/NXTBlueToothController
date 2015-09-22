@@ -12,6 +12,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -448,19 +449,24 @@ public class NXTBluetoothService {
 
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[1024];
-            int bytes;
+//            byte[] buffer = new byte[1024];
+            BluetoothSocket connection_Socket = mmSocket;
+            int n;
 
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
+                    InputStreamReader in = new InputStreamReader(connection_Socket.getInputStream());
+                    n = in.read();
+                    mHandler.obtainMessage(Constants.MESSAGE_READ, n, -1).sendToTarget();
+                    /** from chat example
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer); //error here
                     System.out.println("BYTES =" + bytes);
 
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                     */
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
