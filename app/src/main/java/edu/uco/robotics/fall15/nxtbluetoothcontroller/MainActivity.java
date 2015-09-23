@@ -36,11 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private final String nxt3 = "00:16:53:0D:74:10"; //Stan's NXT robot
 
     /**
-     * String buffer for outgoing messages
-     */
-    private StringBuffer mOutStringBuffer;
-
-    /**
      * Local Bluetooth adapter
      */
     private BluetoothAdapter mBluetoothAdapter = null;
@@ -56,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("STATUS: Not Connected");
-        nxt = "";
+        nxt = "00:16:53:0D:74:10";
 
         /**
          * Initialize all Image Buttons
@@ -117,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
+                    setupNXTBluetoothService();
                     connect.setImageResource(R.drawable.connect);
                     toggle.setEnabled(true);
                 }
@@ -201,11 +197,6 @@ public class MainActivity extends AppCompatActivity {
          * Initialize the BluetoothChatService to perform bluetooth connection
          */
         mNXTService = new NXTBluetoothService(MainActivity.this, mHandler);
-
-        /**
-         * Initialize the buffer for outgoing messages
-         */
-        mOutStringBuffer = new StringBuffer("");
     }
 
     /**
@@ -235,16 +226,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         mNXTService.write(message);
-        // Check that there's actually something to send
-//        if (message.length() > 0) {
-//            // Get the message bytes and tell the BluetoothChatService to write
-//            byte[] send = message.getBytes();
-//            mNXTService.write(send);
-//
-//            // Reset out string buffer to zero and clear the edit text field
-//            mOutStringBuffer.setLength(0);
-//            //mOutEditText.setText(mOutStringBuffer);
-//        }
     }
 
 
@@ -255,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case NXTBluetoothService.STATE_CONNECTED:
-//                            mConversationArrayAdapter.clear();
                               setTitle("STATUS: Connected");
                             break;
                         case NXTBluetoothService.STATE_CONNECTING:
@@ -281,7 +261,11 @@ public class MainActivity extends AppCompatActivity {
                      * TODO: add cases for each message to perform tasks
                      */
                     switch(message){
-
+                        case 69:
+                            Toast.makeText(MainActivity.this, "Debra has dirty mind for choosing " + Integer.toString(message), Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Toast.makeText(MainActivity.this, "Message received has no case for handling it", Toast.LENGTH_LONG).show();
                     }
                     break;
 
@@ -290,60 +274,14 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case Constants.MESSAGE_TOAST:
-//                    if (null != activity) {
-//                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
-//                                Toast.LENGTH_SHORT).show();
-//                    }
                     if(msg.getData().getString(Constants.TOAST) == "Unable to connect device"){
-                        //CharSequence st = "STATUS: Disconnected";
-                        //setStatus(st);
                         setupNXTBluetoothService();
                         connect.setImageResource(R.drawable.connect);
+                        toggle.setEnabled(true);
                     }
                     Toast.makeText(MainActivity.this, msg.getData().getString(Constants.TOAST), Toast.LENGTH_SHORT).show();
                     break;
             }
-//            switch (msg.arg1) {
-//                case 19:
-//                    Toast.makeText(getApplicationContext(), "Received 19", Toast.LENGTH_LONG).show();
-//                    break;
-//                case 29:
-//                    Toast.makeText(getApplicationContext(), "Received 29", Toast.LENGTH_LONG).show();
-//                    break;
-//                case 99:
-//                    nxt.disconnect();
-//                default:
-//                    break;
-//            }
         }
     };
-
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case REQUEST_CONNECT_DEVICE_SECURE:
-//                // When DeviceListActivity returns with a device to connect
-//                if (resultCode == Activity.RESULT_OK) {
-//                    connectDevice(data, true);
-//                }
-//                break;
-//            case REQUEST_CONNECT_DEVICE_INSECURE:
-//                // When DeviceListActivity returns with a device to connect
-//                if (resultCode == Activity.RESULT_OK) {
-//                    connectDevice(data, false);
-//                }
-//                break;
-//            case REQUEST_ENABLE_BT:
-//                // When the request to enable Bluetooth returns
-//                if (resultCode == Activity.RESULT_OK) {
-//                    // Bluetooth is now enabled, so set up a chat session
-//                    setupConnection();
-//                } else {
-//                    // User did not enable Bluetooth or an error occurred
-//                    Log.d(TAG, "BT not enabled");
-//                    Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving,
-//                            Toast.LENGTH_SHORT).show();
-//                    getActivity().finish();
-//                }
-//        }
-//    }
 }
