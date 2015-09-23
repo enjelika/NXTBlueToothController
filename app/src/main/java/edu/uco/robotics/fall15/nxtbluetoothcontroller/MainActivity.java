@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("STATUS: Not Connected");
 
-        //Initialize all Image Buttons
+        /**
+         * Initialize all Image Buttons
+         */
         btnUp = (ImageButton) findViewById(R.id.btnup);
         btnLeft = (ImageButton) findViewById(R.id.btnleft);
         btnRight = (ImageButton) findViewById(R.id.btnright);
@@ -58,9 +60,14 @@ public class MainActivity extends AppCompatActivity {
         btnStop = (ImageButton) findViewById(R.id.btnstop);
         connect = (ImageButton) findViewById(R.id.conn_disconn_button);
 
-        //Get local Bluetooth adapter
+        /**
+         * Get local Bluetooth adapter
+         */
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        //if Bluetooth is not enabled
+
+        /**
+         * If Bluetooth is not enabled
+         */
         if(mBluetoothAdapter.isEnabled() == false) {
             mBluetoothAdapter.enable();
             while(!(mBluetoothAdapter.isEnabled())) {
@@ -128,19 +135,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        /**
+         * Inflate the menu; this adds items to the action bar if it is present.
+         */
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        /**
+         * Handle action bar item clicks here. The action bar will
+         * automatically handle clicks on the Home/Up button, so long
+         * as you specify a parent activity in AndroidManifest.xml.
+         */
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        /**
+         * no inspection SimplifiableIfStatement
+         */
         if (id == R.id.action_settings) {
             return true;
         }
@@ -148,7 +161,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Setup connection and service*/
+    /**
+     * Setup connection and service
+     */
     private void setupNXTBluetoothService() {
         // Initialize the BluetoothChatService to perform bluetooth connections
         mNXTService = new NXTBluetoothService(MainActivity.this, mHandler);
@@ -156,15 +171,10 @@ public class MainActivity extends AppCompatActivity {
         mOutStringBuffer = new StringBuffer("");
     }
 
-//    /**
-//     * Establish connection with other device
-//     *
-//     * @param data   An {@link Intent} with {@link DeviceListActivity#EXTRA_DEVICE_ADDRESS} extra.
-//     * @param secure Socket Security type - Secure (true) , Insecure (false)
-//     */
+    /**
+     * Establish connection with NXT robot
+     */
     private void connectDevice() {
-        // Get the device MAC address
-//        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(nxt);
         // Attempt to connect to the device
@@ -199,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-//            FragmentActivity activity = getActivity();
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
@@ -211,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                             setTitle("STATUS: Waiting...");
                             break;
                         case NXTBluetoothService.STATE_LISTEN:
+                            break;
                         case NXTBluetoothService.STATE_NONE:
                             setTitle("STATUS: Disconnected");
                             break;
