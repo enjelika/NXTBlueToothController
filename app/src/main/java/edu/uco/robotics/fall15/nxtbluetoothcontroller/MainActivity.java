@@ -11,13 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton btnUp, btnLeft, btnStop,
                         btnRight, btnBack, connect;
+
+    private ToggleButton toggle;
+
     //private NXTBluetooth nxt = new NXTBluetooth();
     //private NXTListenThread listenThread;
 
@@ -26,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
 //    private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
 //    private static final int REQUEST_ENABLE_BT = 3;
 
-    private final String nxt = "00:16:53:15:A8:79"; //NXT
+    //private final String nxt = "00:16:53:15:A8:79"; //NXT
+    private String nxt;
+    private final String nxt1 = "00:16:53:15:A8:79"; //Debra's NXT robot
+    private final String nxt3 = "00:16:53:0D:74:10"; //Stan's NXT robot
 
     /**
      * String buffer for outgoing messages
@@ -49,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("STATUS: Not Connected");
+        nxt = "";
 
         /**
          * Initialize all Image Buttons
@@ -59,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         btnBack = (ImageButton) findViewById(R.id.btndown);
         btnStop = (ImageButton) findViewById(R.id.btnstop);
         connect = (ImageButton) findViewById(R.id.conn_disconn_button);
+
+        /**
+         * Initialize Toggle Button
+         */
+        toggle = (ToggleButton) findViewById(R.id.nxt_toggle);
 
         /**
          * Get local Bluetooth adapter
@@ -75,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    /**
+                     * NXT 1 is selected
+                     */
+                    nxt = nxt1;
+                } else {
+                    /**
+                     * NXT 3 is selected
+                     */
+                    nxt = nxt3;
+                }
+            }
+        });
+
         connect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,11 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     setupNXTBluetoothService();
                     connectDevice();
                     connect.setImageResource(R.drawable.disconnect);
+                    toggle.setEnabled(false);
                 }else if(mNXTService.getState() == 3){
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
                     connect.setImageResource(R.drawable.connect);
+                    toggle.setEnabled(true);
                 }
             }
         });
@@ -165,9 +198,14 @@ public class MainActivity extends AppCompatActivity {
      * Setup connection and service
      */
     private void setupNXTBluetoothService() {
-        // Initialize the BluetoothChatService to perform bluetooth connections
+        /**
+         * Initialize the BluetoothChatService to perform bluetooth connection
+         */
         mNXTService = new NXTBluetoothService(MainActivity.this, mHandler);
-        // Initialize the buffer for outgoing messages
+
+        /**
+         * Initialize the buffer for outgoing messages
+         */
         mOutStringBuffer = new StringBuffer("");
     }
 
