@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 //    private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
 //    private static final int REQUEST_ENABLE_BT = 3;
 
-    //private final String nxt = "00:16:53:15:A8:79"; //NXT
     private String nxt;
     private final String nxt1 = "00:16:53:15:A8:79"; //Debra's NXT robot
     private final String nxt3 = "00:16:53:0D:74:10"; //Stan's NXT robot
@@ -213,9 +212,14 @@ public class MainActivity extends AppCompatActivity {
      * Establish connection with NXT robot
      */
     private void connectDevice() {
-        // Get the BluetoothDevice object
+        /**
+         * Get the BluetoothDevice object
+         */
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(nxt);
-        // Attempt to connect to the device
+
+        /**
+         * Attempt to connect to the device
+         */
         mNXTService.connect(device);
     }
 
@@ -269,21 +273,19 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case Constants.MESSAGE_READ:
-                    /**Gets int value of message from NXT that is passed from NXTBluetoothService*/
+                    /**
+                     * Gets int value of message from NXT that is passed from NXTBluetoothService
+                     */
                     int message = msg.arg1;
-                    /**TODO: add cases for each message to perform tasks*/
+                    /**
+                     * TODO: add cases for each message to perform tasks
+                     */
                     switch(message){
 
                     }
                     break;
 
                 case Constants.MESSAGE_DEVICE_NAME:
-                    // save the connected device's name
-                    //mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
-//                    if (null != activity) {
-//                        Toast.makeText(activity, "Connected to "
-//                                + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-//                    }
                     Toast.makeText(MainActivity.this, "Connected to NXT", Toast.LENGTH_SHORT).show();
                     break;
 
