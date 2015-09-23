@@ -122,40 +122,40 @@ public class MainActivity extends AppCompatActivity {
         btnUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                byte message = 19;
-//                sendMessage(message);
+                byte message = 19;
+                sendMessage(message);
             }
         });
 
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                byte message = 29;
-//                sendMessage(message);
+                byte message = 29;
+                sendMessage(message);
             }
         });
 
         btnLeft.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                byte message = 39;
-//                sendMessage(message);
+                byte message = 39;
+                sendMessage(message);
             }
         });
 
         btnRight.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                byte message = 49;
-//                sendMessage(message);
+                byte message = 49;
+                sendMessage(message);
             }
         });
 
         btnStop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                byte message = 59;
-//                sendMessage(message);
+                byte message = 59;
+                sendMessage(message);
             }
         });
 
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Debra has dirty mind for choosing " + Integer.toString(message), Toast.LENGTH_LONG).show();
                             break;
                         default:
-                            Toast.makeText(MainActivity.this, "Message received has no case for handling it", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Message received int = " + Integer.toString(message), Toast.LENGTH_LONG).show();
                     }
                     break;
 
