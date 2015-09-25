@@ -2,7 +2,10 @@ package edu.uco.robotics.fall15.nxtbluetoothcontroller;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton btnUp, btnLeft, btnStop,
@@ -23,13 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ToggleButton toggle;
 
-    //private NXTBluetooth nxt = new NXTBluetooth();
-    //private NXTListenThread listenThread;
-
-    // Intent request codes
-//    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-//    private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
-//    private static final int REQUEST_ENABLE_BT = 3;
+    public static final int SOUND_HELLO = 1;
+    private SoundPool soundPool;
+    private HashMap<Integer, Integer> soundPoolMap;
 
     private String nxt;
     private final String nxt1 = "00:16:53:15:A8:79"; //Debra's NXT robot
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("STATUS: Not Connected");
         nxt = "00:16:53:0D:74:10";
+        initSounds();
 
         /**
          * Initialize all Image Buttons
@@ -236,7 +238,8 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case NXTBluetoothService.STATE_CONNECTED:
-                              setTitle("STATUS: Connected");
+                            setTitle("STATUS: Connected");
+                            greeting();
                             break;
                         case NXTBluetoothService.STATE_CONNECTING:
                             setTitle("STATUS: Waiting...");
@@ -284,4 +287,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+	private void initSounds() {
+		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+		soundPoolMap = new HashMap<Integer, Integer>();
+		soundPoolMap.put(SOUND_HELLO, soundPool.load(this, R.raw.wheatley_hello, 1));
+	}
+
+	public void playSound(int sound) {
+		// Updated: The next 4 lines calculate the current volume in a scale of 0.0 to 1.0
+		AudioManager mgr = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
+		float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+		float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		float volume = streamVolumeCurrent / streamVolumeMax;
+
+		// Play the sound with the correct volume
+		soundPool.play(soundPoolMap.get(sound), volume, volume, 1, 0, 1f);
+	}
+
+	public void greeting() {
+		playSound(SOUND_HELLO);
+	}
 }
