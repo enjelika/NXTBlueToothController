@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ToggleButton toggle;
 
     public static final int SOUND_HELLO = 1;
+    public static final int SOUND_BYE = 2;
     private SoundPool soundPool;
     private HashMap<Integer, Integer> soundPoolMap;
 
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
+                    fairwell();
                     setupNXTBluetoothService();
                     connect.setImageResource(R.drawable.connect);
                     toggle.setEnabled(true);
@@ -290,8 +292,9 @@ public class MainActivity extends AppCompatActivity {
 
 	private void initSounds() {
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
-		soundPoolMap = new HashMap<Integer, Integer>();
+		soundPoolMap = new HashMap<>();
 		soundPoolMap.put(SOUND_HELLO, soundPool.load(this, R.raw.wheatley_hello, 1));
+        soundPoolMap.put(SOUND_BYE, soundPool.load(this, R.raw.wheatley_bye, 1));
 	}
 
 	public void playSound(int sound) {
@@ -306,6 +309,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void greeting() {
-		playSound(SOUND_HELLO);
+        playSound(SOUND_HELLO);
 	}
+
+    public void fairwell() { playSound(SOUND_BYE); }
 }
