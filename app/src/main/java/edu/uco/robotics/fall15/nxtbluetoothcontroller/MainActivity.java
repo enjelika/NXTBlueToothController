@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * If Bluetooth is not enabled
          */
-        if(mBluetoothAdapter.isEnabled() == false) {
+        if(!mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.enable();
             while(!(mBluetoothAdapter.isEnabled())) {
                 System.out.println("Trying to enable BlueTooth...");
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Initialize the BluetoothChatService to perform bluetooth connection
          */
-        mNXTService = new NXTBluetoothService(MainActivity.this, mHandler);
+        mNXTService = new NXTBluetoothService(mHandler);
     }
 
     /**
