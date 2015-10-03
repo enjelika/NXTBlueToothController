@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int SOUND_HELLO = 1;
     public static final int SOUND_BYE = 2;
+    public static final int SOUND_OBJECT = 3;
+    public static final int SOUND_CARRY_ON = 4;
     private SoundPool soundPool;
     private HashMap<Integer, Integer> soundPoolMap;
 
@@ -266,8 +268,12 @@ public class MainActivity extends AppCompatActivity {
                      * TODO: add cases for each message to perform tasks
                      */
                     switch(message){
+                        case 68:
+                            careful();
+                            break;
                         case 69:
-                            Toast.makeText(MainActivity.this, "Debra has dirty mind for choosing " + Integer.toString(message), Toast.LENGTH_LONG).show();
+                            carryOn();
+                            //Toast.makeText(MainActivity.this, "Debra has dirty mind for choosing " + Integer.toString(message), Toast.LENGTH_LONG).show();
                             break;
                         default:
                             Toast.makeText(MainActivity.this, "Message received int = " + Integer.toString(message), Toast.LENGTH_LONG).show();
@@ -295,6 +301,8 @@ public class MainActivity extends AppCompatActivity {
 		soundPoolMap = new HashMap<>();
 		soundPoolMap.put(SOUND_HELLO, soundPool.load(this, R.raw.wheatley_hello, 1));
         soundPoolMap.put(SOUND_BYE, soundPool.load(this, R.raw.wheatley_bye, 1));
+        soundPoolMap.put(SOUND_OBJECT, soundPool.load(this, R.raw.wheatley_careful, 1));
+        soundPoolMap.put(SOUND_CARRY_ON, soundPool.load(this, R.raw.wheatley_carry_on, 1));
 	}
 
 	public void playSound(int sound) {
@@ -313,4 +321,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
     public void fairwell() { playSound(SOUND_BYE); }
+
+    public void careful() { playSound(SOUND_OBJECT); }
+
+    public void carryOn() { playSound(SOUND_CARRY_ON); }
 }
