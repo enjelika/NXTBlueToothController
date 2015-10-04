@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int SOUND_BYE = 2;
     public static final int SOUND_OBJECT = 3;
     public static final int SOUND_CARRY_ON = 4;
+    public static final int SOUND_DO_WHAT = 5;
+    public static final int SOUND_PLACE_HUGE = 6;
+    public static final int SOUND_SHOOT_FOR_STARS = 7;
+    public static final int SOUND_THIS_WAY = 8;
     private SoundPool soundPool;
     private HashMap<Integer, Integer> soundPoolMap;
 
@@ -303,6 +307,10 @@ public class MainActivity extends AppCompatActivity {
         soundPoolMap.put(SOUND_BYE, soundPool.load(this, R.raw.wheatley_bye, 1));
         soundPoolMap.put(SOUND_OBJECT, soundPool.load(this, R.raw.wheatley_careful, 1));
         soundPoolMap.put(SOUND_CARRY_ON, soundPool.load(this, R.raw.wheatley_carry_on, 1));
+        soundPoolMap.put(SOUND_DO_WHAT, soundPool.load(this, R.raw.wheatley_and_do_what, 1));
+        soundPoolMap.put(SOUND_PLACE_HUGE, soundPool.load(this, R.raw.wheatley_place_huge, 1));
+        soundPoolMap.put(SOUND_SHOOT_FOR_STARS, soundPool.load(this, R.raw.wheatley_shoot_for_stars, 1));
+        soundPoolMap.put(SOUND_THIS_WAY, soundPool.load(this, R.raw.wheatley_try_this_way, 1));
 	}
 
 	public void playSound(int sound) {
