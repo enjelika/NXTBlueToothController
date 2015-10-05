@@ -238,6 +238,16 @@ public class MainActivity extends AppCompatActivity {
         mNXTService.write(message);
     }
 
+    /**
+     * Reverses the enabled state of all the controller buttons
+     */
+    private void reverseButtonEnableState(){
+        btnUp.setEnabled(!btnUp.isEnabled());
+        btnRight.setEnabled(!btnRight.isEnabled());
+        btnLeft.setEnabled(!btnLeft.isEnabled());
+        btnBack.setEnabled(!btnBack.isEnabled());
+        btnStop.setEnabled(!btnStop.isEnabled());
+    }
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -274,13 +284,15 @@ public class MainActivity extends AppCompatActivity {
                     switch(message){
                         case 68:
                             careful();
+                            reverseButtonEnableState();
                             break;
                         case 69:
                             carryOn();
+                            reverseButtonEnableState();
                             //Toast.makeText(MainActivity.this, "Debra has dirty mind for choosing " + Integer.toString(message), Toast.LENGTH_LONG).show();
                             break;
                         default:
-                            Toast.makeText(MainActivity.this, "Message received int = " + Integer.toString(message), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this, "Message received int = " + Integer.toString(message), Toast.LENGTH_LONG).show();
                     }
                     break;
 

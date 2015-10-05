@@ -21,7 +21,8 @@
             android:textOn="NXT 1"
             android:textOff="NXT 3"
             android:layout_marginTop="10sp"
-            android:layout_marginRight="15sp"/>
+            android:layout_marginRight="15sp"
+            android:checked="true"/>
 
         <ImageButton
             android:id="@+id/conn_disconn_button"
