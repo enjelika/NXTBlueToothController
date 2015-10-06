@@ -247,6 +247,20 @@ public class MainActivity extends AppCompatActivity {
         btnLeft.setEnabled(!btnLeft.isEnabled());
         btnBack.setEnabled(!btnBack.isEnabled());
         btnStop.setEnabled(!btnStop.isEnabled());
+
+        if (!btnBack.isEnabled() == true){
+            btnUp.setImageResource(R.drawable.up_disabled);
+            btnRight.setImageResource(R.drawable.right_disabled);
+            btnLeft.setImageResource(R.drawable.left_disabled);
+            btnBack.setImageResource(R.drawable.down_disabled);
+            btnStop.setImageResource(R.drawable.stop_disabled);
+        } else {
+            btnUp.setImageResource(R.drawable.up);
+            btnRight.setImageResource(R.drawable.right);
+            btnLeft.setImageResource(R.drawable.left);
+            btnBack.setImageResource(R.drawable.down);
+            btnStop.setImageResource(R.drawable.stop);
+        }
     }
 
     private final Handler mHandler = new Handler() {
