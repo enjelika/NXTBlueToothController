@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
-                    farewell();
                     setupNXTBluetoothService();
                     connect.setImageResource(R.drawable.connect);
                     toggle.setEnabled(true);
