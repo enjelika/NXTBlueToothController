@@ -121,14 +121,12 @@ public class MainActivity extends AppCompatActivity {
                     setupNXTBluetoothService();
                     connectDevice();
                     connect.setImageResource(R.drawable.disconnect);
-                    ButtonEnableState(true);
                     toggle.setEnabled(false);
                 }else if(mNXTService.getState() == 3){
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
-                    ButtonEnableState(false);
-                    fairwell();
+                    farewell();
                     setupNXTBluetoothService();
                     connect.setImageResource(R.drawable.connect);
                     toggle.setEnabled(true);
@@ -175,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         btnStop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bED("stop");
                 byte message = 59;
                 sendMessage(message);
             }
@@ -381,16 +380,19 @@ public class MainActivity extends AppCompatActivity {
 
                 case Constants.MESSAGE_DEVICE_NAME:
                     Toast.makeText(MainActivity.this, "Connected to NXT", Toast.LENGTH_SHORT).show();
+                    ButtonEnableState(true);
                     break;
 
                 case Constants.MESSAGE_TOAST:
                     if(msg.getData().getString(Constants.TOAST) == "Unable to connect device"){
                         setupNXTBluetoothService();
+                        ButtonEnableState(false);
                         connect.setImageResource(R.drawable.connect);
                         toggle.setEnabled(true);
                     }else if(msg.getData().getString(Constants.TOAST) == "Device connection was lost"){
                         mNXTService.stop();
-                        fairwell();
+                        ButtonEnableState(false);
+                        farewell();
                         setupNXTBluetoothService();
                         connect.setImageResource(R.drawable.connect);
                         toggle.setEnabled(true);
@@ -429,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
         playSound(SOUND_HELLO);
 	}
 
-    public void fairwell() { playSound(SOUND_BYE); }
+    public void farewell() { playSound(SOUND_BYE); }
 
     public void careful() { playSound(SOUND_OBJECT); }
 
