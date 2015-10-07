@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("STATUS: Not Connected");
-        nxt = "00:16:53:0D:74:10";
+        nxt = "00:16:53:15:A8:79";
         initSounds();
 
         /**
@@ -91,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Trying to enable BlueTooth...");
             }
         }
+
+        /**
+         * Disable control buttons
+         */
+        ButtonEnableState(false);
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -132,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         btnUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bED("up");
                 byte message = 19;
                 sendMessage(message);
             }
@@ -140,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bED("back");
                 byte message = 29;
                 sendMessage(message);
             }
@@ -148,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         btnLeft.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bED("left");
                 byte message = 39;
                 sendMessage(message);
             }
@@ -156,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         btnRight.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bED("right");
                 byte message = 49;
                 sendMessage(message);
             }
@@ -241,14 +250,14 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Reverses the enabled state of all the controller buttons
      */
-    private void reverseButtonEnableState(){
-        btnUp.setEnabled(!btnUp.isEnabled());
-        btnRight.setEnabled(!btnRight.isEnabled());
-        btnLeft.setEnabled(!btnLeft.isEnabled());
-        btnBack.setEnabled(!btnBack.isEnabled());
-        btnStop.setEnabled(!btnStop.isEnabled());
+    private void ButtonEnableState(boolean set){
+        btnUp.setEnabled(set);
+        btnRight.setEnabled(set);
+        btnLeft.setEnabled(set);
+        btnBack.setEnabled(set);
+        btnStop.setEnabled(set);
 
-        if (!btnBack.isEnabled() == true){
+        if (set == true){
             btnUp.setImageResource(R.drawable.up_disabled);
             btnRight.setImageResource(R.drawable.right_disabled);
             btnLeft.setImageResource(R.drawable.left_disabled);
@@ -260,6 +269,52 @@ public class MainActivity extends AppCompatActivity {
             btnLeft.setImageResource(R.drawable.left);
             btnBack.setImageResource(R.drawable.down);
             btnStop.setImageResource(R.drawable.stop);
+        }
+    }
+
+    /**
+     * Disables last button pressed and enables previous pressed
+     */
+    private void bED(String button){
+        switch(button){
+            case "up":
+                btnUp.setEnabled(false);
+                btnUp.setImageResource(R.drawable.up_disabled);
+                btnLeft.setEnabled(true);
+                btnRight.setEnabled(true);
+                btnBack.setEnabled(true);
+                btnRight.setImageResource(R.drawable.right);
+                btnLeft.setImageResource(R.drawable.left);
+                btnBack.setImageResource(R.drawable.down);
+                break;
+            case "left":
+                btnLeft.setEnabled(false);
+                btnLeft.setImageResource(R.drawable.left_disabled);
+                btnUp.setEnabled(true);
+                btnRight.setEnabled(true);
+                btnBack.setEnabled(true);
+                btnRight.setImageResource(R.drawable.right);
+                btnUp.setImageResource(R.drawable.up);
+                btnBack.setImageResource(R.drawable.down);
+                break;
+            case "right":
+                btnRight.setEnabled(false);
+                btnRight.setImageResource(R.drawable.right_disabled);
+                btnUp.setEnabled(true);
+                btnLeft.setEnabled(true);
+                btnBack.setEnabled(true);
+                btnLeft.setImageResource(R.drawable.left);
+                btnUp.setImageResource(R.drawable.up);
+                btnBack.setImageResource(R.drawable.down);
+            case "back":
+                btnBack.setEnabled(false);
+                btnBack.setImageResource(R.drawable.down_disabled);
+                btnUp.setEnabled(true);
+                btnRight.setEnabled(true);
+                btnLeft.setEnabled(true);
+                btnRight.setImageResource(R.drawable.right);
+                btnUp.setImageResource(R.drawable.up);
+                btnLeft.setImageResource(R.drawable.left);
         }
     }
 
@@ -298,11 +353,11 @@ public class MainActivity extends AppCompatActivity {
                     switch(message){
                         case 68:
                             careful();
-                            reverseButtonEnableState();
+                            ButtonEnableState(false);
                             break;
                         case 69:
                             carryOn();
-                            reverseButtonEnableState();
+                            ButtonEnableState(true);
                             //Toast.makeText(MainActivity.this, "Debra has dirty mind for choosing " + Integer.toString(message), Toast.LENGTH_LONG).show();
                             break;
                         default:
@@ -316,6 +371,12 @@ public class MainActivity extends AppCompatActivity {
 
                 case Constants.MESSAGE_TOAST:
                     if(msg.getData().getString(Constants.TOAST) == "Unable to connect device"){
+                        setupNXTBluetoothService();
+                        connect.setImageResource(R.drawable.connect);
+                        toggle.setEnabled(true);
+                    }else if(msg.getData().getString(Constants.TOAST) == "Device connection was lost"){
+                        mNXTService.stop();
+                        fairwell();
                         setupNXTBluetoothService();
                         connect.setImageResource(R.drawable.connect);
                         toggle.setEnabled(true);
