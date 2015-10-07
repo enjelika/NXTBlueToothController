@@ -317,6 +317,15 @@ public class MainActivity extends AppCompatActivity {
                 btnRight.setImageResource(R.drawable.right);
                 btnUp.setImageResource(R.drawable.up);
                 btnLeft.setImageResource(R.drawable.left);
+            case "stop":
+                btnUp.setEnabled(true);
+                btnBack.setEnabled(true);
+                btnRight.setEnabled(true);
+                btnLeft.setEnabled(true);
+                btnRight.setImageResource(R.drawable.right);
+                btnUp.setImageResource(R.drawable.up);
+                btnLeft.setImageResource(R.drawable.left);
+                btnBack.setImageResource(R.drawable.down);
         }
     }
 
