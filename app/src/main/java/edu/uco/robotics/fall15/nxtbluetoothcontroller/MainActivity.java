@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -121,11 +122,13 @@ public class MainActivity extends AppCompatActivity {
                     setupNXTBluetoothService();
                     connectDevice();
                     connect.setImageResource(R.drawable.disconnect);
+                    ButtonEnableState(true);
                     toggle.setEnabled(false);
                 }else if(mNXTService.getState() == 3){
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
+                    ButtonEnableState(false);
                     fairwell();
                     setupNXTBluetoothService();
                     connect.setImageResource(R.drawable.connect);
@@ -257,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         btnBack.setEnabled(set);
         btnStop.setEnabled(set);
 
-        if (set == true){
+        if (set == false){
             btnUp.setImageResource(R.drawable.up_disabled);
             btnRight.setImageResource(R.drawable.right_disabled);
             btnLeft.setImageResource(R.drawable.left_disabled);
