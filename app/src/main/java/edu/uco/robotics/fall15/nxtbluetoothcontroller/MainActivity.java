@@ -308,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
                 btnLeft.setImageResource(R.drawable.left);
                 btnUp.setImageResource(R.drawable.up);
                 btnBack.setImageResource(R.drawable.down);
+                break;
             case "back":
                 btnBack.setEnabled(false);
                 btnBack.setImageResource(R.drawable.down_disabled);
@@ -317,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
                 btnRight.setImageResource(R.drawable.right);
                 btnUp.setImageResource(R.drawable.up);
                 btnLeft.setImageResource(R.drawable.left);
+                break;
             case "stop":
                 btnUp.setEnabled(true);
                 btnBack.setEnabled(true);
@@ -326,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 btnUp.setImageResource(R.drawable.up);
                 btnLeft.setImageResource(R.drawable.left);
                 btnBack.setImageResource(R.drawable.down);
+                break;
         }
     }
 
