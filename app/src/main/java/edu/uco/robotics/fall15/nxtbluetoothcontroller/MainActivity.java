@@ -368,11 +368,11 @@ public class MainActivity extends AppCompatActivity {
         btnStop.setEnabled(set);
 
         if (set == false){
-            btnUp.setImageResource(R.drawable.up_disabled);
-            btnRight.setImageResource(R.drawable.right_disabled);
-            btnLeft.setImageResource(R.drawable.left_disabled);
-            btnBack.setImageResource(R.drawable.down_disabled);
-            btnStop.setImageResource(R.drawable.stop_disabled);
+            btnUp.setImageResource(R.drawable.up_dis);
+            btnRight.setImageResource(R.drawable.right_dis);
+            btnLeft.setImageResource(R.drawable.left_dis);
+            btnBack.setImageResource(R.drawable.down_dis);
+            btnStop.setImageResource(R.drawable.stop_dis);
         } else {
             btnUp.setImageResource(R.drawable.up);
             btnRight.setImageResource(R.drawable.right);
