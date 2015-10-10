@@ -12,12 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton btnUp, btnLeft, btnStop,
                         btnRight, btnBack, connect;
+    private TextView txtState;
 
     private ToggleButton toggle;
 
@@ -42,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private String nxt;
     private final String nxt1 = "00:16:53:15:A8:79"; //Debra's NXT robot
     private final String nxt3 = "00:16:53:0D:74:10"; //Stan's NXT robot
+
+    public static final int FORWARD = -1;
+    public static final int BACKWARD = -2;
+    public static final int STOPPED = -3;
+
+    int CURRENT_STATE = -3;
 
     /**
      * Local Bluetooth adapter
@@ -72,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         btnStop = (ImageButton) findViewById(R.id.btnstop);
         connect = (ImageButton) findViewById(R.id.conn_disconn_button);
 
+        txtState = (TextView) findViewById(R.id.btnAction);
+        txtState.setText("Stopped");
         /**
          * Initialize Toggle Button
          */
@@ -100,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     /**
                      * NXT 1 is selected
                      */
@@ -117,18 +130,17 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mNXTService == null || mNXTService.getState() == 0){
+                if (mNXTService == null || mNXTService.getState() == 0) {
                     setupNXTBluetoothService();
                     connectDevice();
                     connect.setImageResource(R.drawable.disconnect);
                     ButtonEnableState(true);
                     toggle.setEnabled(false);
-                }else if(mNXTService.getState() == 3){
+                } else if (mNXTService.getState() == 3) {
                     byte message = 99;
                     sendMessage(message);
                     mNXTService.stop();
                     ButtonEnableState(false);
-                    fairwell();
                     setupNXTBluetoothService();
                     connect.setImageResource(R.drawable.connect);
                     toggle.setEnabled(true);
@@ -142,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
                 bED("up");
                 byte message = 19;
                 sendMessage(message);
+                CURRENT_STATE = -1;
+                txtState.setText("Forward");
             }
         });
 
@@ -151,35 +165,129 @@ public class MainActivity extends AppCompatActivity {
                 bED("back");
                 byte message = 29;
                 sendMessage(message);
-            }
-        });
-
-        btnLeft.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bED("left");
-                byte message = 39;
-                sendMessage(message);
-            }
-        });
-
-        btnRight.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bED("right");
-                byte message = 49;
-                sendMessage(message);
+                CURRENT_STATE = -2;
+                txtState.setText("Backward");
             }
         });
 
         btnStop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bED("stop");
                 byte message = 59;
                 sendMessage(message);
+                CURRENT_STATE = -3;
+                txtState.setText("Stoppted");
             }
         });
 
+        btnLeft.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //disable turn right button and set disable image
+                    btnRight.setEnabled(false);
+                    //show button pressed image
+                    btnLeft.setImageResource(R.drawable.left_disabled);
+                    //send commands based on state
+                    byte message;
+                    switch (CURRENT_STATE) {
+                        case FORWARD:
+                            message = 39;
+                            sendMessage(message);
+                            break;
+                        case STOPPED:
+                            message = 38;
+                            sendMessage(message);
+                            break;
+                        case BACKWARD:
+                            message = 37;
+                            sendMessage(message);
+                            break;
+                        default:
+
+                    }
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //endable turn right and change image
+                    btnRight.setEnabled(true);
+                    //show button not pressed image
+                    btnLeft.setImageResource(R.drawable.left);
+                    //send commands to resume non-turning state
+                    byte message;
+                    switch (CURRENT_STATE) {
+                        case FORWARD:
+                            message = 19;
+                            sendMessage(message);
+                            break;
+                        case STOPPED:
+                            message = 59;
+                            sendMessage(message);
+                            break;
+                        case BACKWARD:
+                            message = 29;
+                            sendMessage(message);
+                            break;
+                        default:
+
+                    }
+                }
+                return false;
+            }
+        });
+
+        btnRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    //disable turn left and change image
+                    btnLeft.setEnabled(false);
+                    //show button pressed image
+                    btnRight.setImageResource(R.drawable.right_disabled);
+                    //send commands based on state
+                    byte message;
+                    switch (CURRENT_STATE){
+                        case FORWARD:
+                            message = 49;
+                            sendMessage(message);
+                            break;
+                        case STOPPED:
+                            message = 48;
+                            sendMessage(message);
+                            break;
+                        case BACKWARD:
+                            message = 47;
+                            sendMessage(message);
+                            break;
+                        default:
+
+                    }
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                    //enable turn left and change image
+                    btnLeft.setEnabled(true);
+                    //show button not pressed image
+                    btnRight.setImageResource(R.drawable.right);
+                    //send commands to resume non-turning state
+                    byte message;
+                    switch (CURRENT_STATE){
+                        case FORWARD:
+                            message = 19;
+                            sendMessage(message);
+                            break;
+                        case STOPPED:
+                            message = 59;
+                            sendMessage(message);
+                            break;
+                        case BACKWARD:
+                            message = 29;
+                            sendMessage(message);
+                            break;
+                        default:
+
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -289,25 +397,6 @@ public class MainActivity extends AppCompatActivity {
                 btnLeft.setImageResource(R.drawable.left);
                 btnBack.setImageResource(R.drawable.down);
                 break;
-            case "left":
-                btnLeft.setEnabled(false);
-                btnLeft.setImageResource(R.drawable.left_disabled);
-                btnUp.setEnabled(true);
-                btnRight.setEnabled(true);
-                btnBack.setEnabled(true);
-                btnRight.setImageResource(R.drawable.right);
-                btnUp.setImageResource(R.drawable.up);
-                btnBack.setImageResource(R.drawable.down);
-                break;
-            case "right":
-                btnRight.setEnabled(false);
-                btnRight.setImageResource(R.drawable.right_disabled);
-                btnUp.setEnabled(true);
-                btnLeft.setEnabled(true);
-                btnBack.setEnabled(true);
-                btnLeft.setImageResource(R.drawable.left);
-                btnUp.setImageResource(R.drawable.up);
-                btnBack.setImageResource(R.drawable.down);
             case "back":
                 btnBack.setEnabled(false);
                 btnBack.setImageResource(R.drawable.down_disabled);
@@ -317,15 +406,17 @@ public class MainActivity extends AppCompatActivity {
                 btnRight.setImageResource(R.drawable.right);
                 btnUp.setImageResource(R.drawable.up);
                 btnLeft.setImageResource(R.drawable.left);
+                break;
             case "stop":
                 btnUp.setEnabled(true);
                 btnBack.setEnabled(true);
-                btnRight.setEnabled(true);
-                btnLeft.setEnabled(true);
-                btnRight.setImageResource(R.drawable.right);
+//                btnRight.setEnabled(true);
+//                btnLeft.setEnabled(true);
+//                btnRight.setImageResource(R.drawable.right);
                 btnUp.setImageResource(R.drawable.up);
-                btnLeft.setImageResource(R.drawable.left);
+//                btnLeft.setImageResource(R.drawable.left);
                 btnBack.setImageResource(R.drawable.down);
+                break;
         }
     }
 
@@ -365,6 +456,8 @@ public class MainActivity extends AppCompatActivity {
                         case 68:
                             careful();
                             ButtonEnableState(false);
+                            CURRENT_STATE = STOPPED;
+                            txtState.setText("Stopped");
                             break;
                         case 69:
                             carryOn();
